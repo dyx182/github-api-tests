@@ -43,5 +43,4 @@ build/
 
 ### Mac OS ###
 .DS_Store
-
 echo ".env" >> .gitignore
