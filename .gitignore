@@ -2,7 +2,9 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
+# Файлы окружения
+.env
+*.env
 # Allure отчеты и временные файлы
 allure-results/
 allure-report/
@@ -43,4 +45,3 @@ build/
 
 ### Mac OS ###
 .DS_Store
-echo ".env" >> .gitignore
