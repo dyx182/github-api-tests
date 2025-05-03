@@ -16,5 +16,6 @@ public class ApiData {
     public static final String ORG = dotenv.get("GITHUB_ORG");
     public static final String LOGIN = dotenv.get("GITHUB_LOGIN");
 
-    public static final String TOKEN = dotenv.get("GITHUB_TOKEN"); //yourToken
+    public static final String TOKEN = dotenv.get("GITHUB_TOKEN"); //your token will be here
+    public static final String TOKEN_WITHOUT_ACCESS = dotenv.get("GITHUB_TOKEN_WITHOUT_ACCESS");
 }

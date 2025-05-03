@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GetRepoResponse {
+public class GetUserRepoResponse {
     private String name;
     private String language;
     private String description;
