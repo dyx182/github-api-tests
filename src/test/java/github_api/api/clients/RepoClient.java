@@ -12,7 +12,7 @@ public class RepoClient {
 
     private static final Gson gson = new Gson();
 
-    public Response createRepo(CreateRepoRequest requestJson, String token, String endPoint) {
+    public Response createRepo(CreateRepoRequest requestJson, String token, String endpoint) {
 
         String repoJson = gson.toJson(requestJson);
 
@@ -22,7 +22,7 @@ public class RepoClient {
                 .header("Authorization", "Bearer " + token)
                 .body(repoJson)
                 .when()
-                .post(endPoint);
+                .post(endpoint);
     }
 
     public Response deleteRepo(String owner, String repoName, String token) {
