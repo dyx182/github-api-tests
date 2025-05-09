@@ -2,10 +2,8 @@ package github_api.tests.repo;
 
 import github_api.api.clients.RepoClient;
 import io.qameta.allure.Description;
-import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -14,11 +12,14 @@ import java.util.stream.Stream;
 
 import static github_api.api.config.ApiData.*;
 
-public class RepoDelete {
+public class DeleteRepoTest {
 
     @ParameterizedTest
     @DisplayName("Проверка возможности удаления репозитория")
-    @Description()
+    @Description("""
+        Проверяет корректность работы эндпоинта:
+        - Ответ имеет ожидаемый статус код
+        """)
     @MethodSource("testDataProvider")
     public void deleteRepo(String login, String repoName, String token, int statusCode) {
 
