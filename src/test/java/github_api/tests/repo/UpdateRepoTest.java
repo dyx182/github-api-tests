@@ -1,12 +1,10 @@
 package github_api.tests.repo;
 
 import github_api.api.clients.RepoClient;
-import github_api.api.config.ApiData;
 import github_api.api.models.request.CreateRepoRequest;
-import io.qameta.allure.Step;
-import io.restassured.module.jsv.JsonSchemaValidator;
+import io.qameta.allure.Description;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -18,9 +16,15 @@ import static github_api.api.config.repo.RepoTestData.changeNonExistRepoJson;
 import static github_api.api.config.repo.RepoTestData.changeRepoJson;
 import static org.hamcrest.Matchers.equalTo;
 
-public class RepoUpdate {
+public class UpdateRepoTest {
 
     @ParameterizedTest
+    @DisplayName("Проверка обновления информации в репозитории")
+    @Description("""
+        Проверяет корректность работы эндпоинта:
+        - Ответ имеет ожидаемый статус код
+        - Для успешных ответов проверяется соответствие JSON-схеме
+        """)
     @MethodSource("testDataProvider")
     public void updateRepo(String login,
                            String repoName,

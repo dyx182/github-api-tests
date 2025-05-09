@@ -43,5 +43,35 @@ public class RepoTestData {
                 .isPrivate(false)
                 .build();
     }
+
+    public static CreateRepoRequest changeRepoJson() {
+        return CreateRepoRequest.builder()
+                .name("test-repo-updated-")
+                .description("Updated description via API")
+                .homepage("https://updated.example.com")
+                .isPrivate(false)
+                .hasIssues(true)
+                .hasProjects(true)
+                .hasWiki(true)
+                .hasDiscussions(false)
+                .isTemplate(false)
+                .allowSquashMerge(true)
+                .allowMergeCommit(true)
+                .allowRebaseMerge(true)
+                .allowAutoMerge(false)
+                .deleteBranchOnMerge(false)
+                .useSquashPrTitleAsDefault(false)
+                .squashMergeCommitTitle("PR_TITLE")
+                .squashMergeCommitMessage("COMMIT_MESSAGES")
+                .mergeCommitTitle("MERGE_MESSAGE")
+                .mergeCommitMessage("PR_TITLE")
+                .build();
+    }
+
+    public static CreateRepoRequest changeNonExistRepoJson() {
+        return CreateRepoRequest.builder()
+                .name("non-exist-repo-")
+                .build();
+    }
 }
 
