@@ -6,7 +6,7 @@ public class RepoTestData {
 
     public static CreateRepoRequest getRequestJsonFull() {
         return CreateRepoRequest.builder()
-                .name("test-repo-api")
+                .name("test-repo")
                 .description("test repo from API")
                 .homepage("https://github.com")
                 .isPrivate(false)
@@ -33,12 +33,13 @@ public class RepoTestData {
 
     public static CreateRepoRequest getRequestJsonMinimal() {
         return CreateRepoRequest.builder()
-                .name("test-repo-api-2")
+                .name("test-repo")
                 .build();
     }
 
     public static CreateRepoRequest getRequestJsonInvalid() {
         return CreateRepoRequest.builder()
+                .name("test-repo")
                 .description("test repo from API")
                 .isPrivate(false)
                 .build();

@@ -5,7 +5,7 @@ import lombok.Data;
 
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 public class CreateRepoRequest {
     private String name;
     private String description;

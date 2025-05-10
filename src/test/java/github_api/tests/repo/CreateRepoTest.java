@@ -1,8 +1,6 @@
 package github_api.tests.repo;
 
 import github_api.api.clients.RepoClient;
-import github_api.api.config.ApiData;
-import github_api.api.config.repo.RepoTestData;
 import github_api.api.models.request.CreateRepoRequest;
 import io.qameta.allure.Description;
 import io.qameta.allure.Story;
@@ -14,6 +12,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.File;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import static github_api.api.config.ApiData.*;
@@ -26,8 +25,13 @@ public class CreateRepoTest {
     @ParameterizedTest
     @DisplayName("Проверка возможности создания репозитория")
     @Description("""
-            Проверяет корректность основных сценариев создания репозитория:
-            - Ответ имеет ожидаемый статус код
+            Тест проверяет корректность основных сценариев создания репозитория:
+            - Ответ имеет ожидаемый статус код:
+                201 Created – успешное создание.
+                403 Forbidden – нет прав.
+                401 Unauthorized – нет авторизации.
+                422 Unprocessable Entity – ошибка валидации.
+                404 Not Found – организация не найдена.
             - Для успешных ответов происходит проверка соответсвия JSON-схеме
             """)
     @MethodSource("testDataProvider")
@@ -35,35 +39,51 @@ public class CreateRepoTest {
                            String token,
                            String endpoint,
                            int statusCode,
-                           boolean validateSchema) {
+                           boolean validateSchema,
+                           boolean shouldCreateDuplicate) {
 
-        Response response = new RepoClient().createRepo(requestJson,
+        File schemaFile = new File("src/test/resources/github_create_repo_schema.json");
+
+        String uniqueRepoName = "test-repo" + UUID.randomUUID();
+
+        CreateRepoRequest request = requestJson.toBuilder()
+                .name(uniqueRepoName)
+                .build();
+
+        if(shouldCreateDuplicate) {
+            new RepoClient().createRepo(request, token, endpoint);
+        }
+
+        Response response = new RepoClient().createRepo(request,
                 token,
                 endpoint
         );
 
-        response.then()
-                .log()
-                .ifError()
-                .statusCode(statusCode);
-
-        if(validateSchema) {
-
-            File schemaFile = new File("src/test/resources/github_create_repo_schema.json");
-
+        try {
             response.then()
-                    .assertThat()
-                    .body(JsonSchemaValidator.matchesJsonSchema(schemaFile));
+                    .log()
+                    .ifError()
+                    .statusCode(statusCode);
+            if (validateSchema) {
+                response.then()
+                        .assertThat()
+                        .body(JsonSchemaValidator.matchesJsonSchema(schemaFile));
+            }
+        } finally {
+            if (validateSchema || shouldCreateDuplicate) {
+                new RepoClient().deleteRepo(LOGIN, uniqueRepoName, TOKEN);
+            }
         }
     }
 
-     static Stream<Arguments> testDataProvider() {
+    static Stream<Arguments> testDataProvider() {
         return Stream.of(
-                Arguments.of(getRequestJsonFull(), TOKEN, ENDPOINT_USER_REPOS, 201, true),
-                Arguments.of(getRequestJsonMinimal(), TOKEN, ENDPOINT_USER_REPOS, 201, true),
-                Arguments.of(getRequestJsonFull(), TOKEN_WITHOUT_ACCESS, ENDPOINT_REPOS, 404, false),
-                Arguments.of(getRequestJsonInvalid(), TOKEN, ENDPOINT_REPOS, 422, false),
-                Arguments.of(getRequestJsonFull(), TOKEN, ORG_END_POINT, 404, false)
+                Arguments.of(getRequestJsonFull(), TOKEN, ENDPOINT_USER_REPOS, 201, true, false),
+                Arguments.of(getRequestJsonMinimal(), TOKEN, ENDPOINT_USER_REPOS, 201, true, false),
+                Arguments.of(getRequestJsonFull(), TOKEN_WITHOUT_ACCESS, ENDPOINT_USER_REPOS, 403, false, false),
+                Arguments.of(getRequestJsonFull(), INVALID_TOKEN, ENDPOINT_USER_REPOS, 401, false, false),
+                Arguments.of(getRequestJsonInvalid(), TOKEN, ENDPOINT_USER_REPOS, 422, false, true),
+                Arguments.of(getRequestJsonFull(), TOKEN, ORG_END_POINT, 404, false, false)
         );
     }
 }
