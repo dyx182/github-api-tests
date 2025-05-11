@@ -1,9 +1,8 @@
-package github_api.api.config.repo;
+package github_api.api.utils;
 
 import github_api.api.models.request.CreateRepoRequest;
 
 public class RepoTestData {
-
     public static CreateRepoRequest getRequestJsonFull() {
         return CreateRepoRequest.builder()
                 .name("test-repo")
@@ -74,5 +73,10 @@ public class RepoTestData {
                 .name("non-exist-repo-")
                 .build();
     }
+    public static CreateRepoRequest getUpdateRequest(CreateRepoRequest requestJson, String uniqueRepoName) {
+        CreateRepoRequest request = requestJson.toBuilder()
+                .name(uniqueRepoName)
+                .build();
+        return request;
+    }
 }
-

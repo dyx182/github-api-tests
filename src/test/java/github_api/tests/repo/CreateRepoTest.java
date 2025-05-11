@@ -15,8 +15,9 @@ import java.io.File;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import static github_api.api.config.ApiData.*;
-import static github_api.api.config.repo.RepoTestData.*;
+import static github_api.api.config.ApiConfig.*;
+import static github_api.api.config.EnvConfig.*;
+import static github_api.api.utils.RepoTestData.*;
 
 
 @Story("POST /repos/")
@@ -46,9 +47,7 @@ public class CreateRepoTest {
 
         String uniqueRepoName = "test-repo" + UUID.randomUUID();
 
-        CreateRepoRequest request = requestJson.toBuilder()
-                .name(uniqueRepoName)
-                .build();
+        CreateRepoRequest request = getUpdateRequest(requestJson, uniqueRepoName);
 
         if(shouldCreateDuplicate) {
             new RepoClient().createRepo(request, token, endpoint);
@@ -83,7 +82,7 @@ public class CreateRepoTest {
                 Arguments.of(getRequestJsonFull(), TOKEN_WITHOUT_ACCESS, ENDPOINT_USER_REPOS, 403, false, false),
                 Arguments.of(getRequestJsonFull(), INVALID_TOKEN, ENDPOINT_USER_REPOS, 401, false, false),
                 Arguments.of(getRequestJsonInvalid(), TOKEN, ENDPOINT_USER_REPOS, 422, false, true),
-                Arguments.of(getRequestJsonFull(), TOKEN, ORG_END_POINT, 404, false, false)
+                Arguments.of(getRequestJsonFull(), TOKEN, getOrgEndpoint(ORG), 404, false, false)
         );
     }
 }

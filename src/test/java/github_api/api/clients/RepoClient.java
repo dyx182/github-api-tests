@@ -1,7 +1,7 @@
 package github_api.api.clients;
 
 import com.google.gson.Gson;
-import github_api.api.config.ApiData;
+import github_api.api.config.ApiConfig;
 import github_api.api.models.request.CreateRepoRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -17,7 +17,7 @@ public class RepoClient {
         String repoJson = gson.toJson(requestJson);
 
         return RestAssured.given()
-                .baseUri(ApiData.BASE_URL)
+                .baseUri(ApiConfig.BASE_URL)
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .body(repoJson)
@@ -28,10 +28,10 @@ public class RepoClient {
     public Response deleteRepo(String owner, String repoName, String token) {
 
         return RestAssured.given()
-                .baseUri(ApiData.BASE_URL)
+                .baseUri(ApiConfig.BASE_URL)
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .delete(ApiData.ENDPOINT_REPOS + owner + "/" + repoName);
+                .delete(ApiConfig.ENDPOINT_REPOS + owner + "/" + repoName);
     }
 
     public Response updateRepo(String owner, String repoName, CreateRepoRequest changeRepo, String token) {
@@ -39,19 +39,19 @@ public class RepoClient {
         String changeRepoJson = gson.toJson(changeRepo);
 
         return RestAssured.given()
-                .baseUri(ApiData.BASE_URL)
+                .baseUri(ApiConfig.BASE_URL)
                 .header("Authorization", "Bearer " + token)
                 .body(changeRepoJson)
                 .when()
-                .patch(ApiData.ENDPOINT_REPOS + owner + "/" + repoName);
+                .patch(ApiConfig.ENDPOINT_REPOS + owner + "/" + repoName);
     }
 
     public Response getRepo(String owner, String repoName, String token) {
 
         return RestAssured.given()
-                .baseUri(ApiData.BASE_URL)
+                .baseUri(ApiConfig.BASE_URL)
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .get(ApiData.ENDPOINT_REPOS + owner + "/" + repoName);
+                .get(ApiConfig.ENDPOINT_REPOS + owner + "/" + repoName);
     }
 }
