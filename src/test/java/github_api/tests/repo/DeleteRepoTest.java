@@ -3,6 +3,7 @@ package github_api.tests.repo;
 import github_api.api.clients.RepoClient;
 import github_api.api.models.request.CreateRepoRequest;
 import io.qameta.allure.Description;
+import io.qameta.allure.Story;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,6 +16,7 @@ import static github_api.api.config.ApiConfig.ENDPOINT_USER_REPOS;
 import static github_api.api.config.EnvConfig.*;
 import static github_api.api.utils.RepoTestData.getRequestJsonFull;
 
+@Story("DELETE /repos/{owner}/{repo}")
 public class DeleteRepoTest {
 
     @ParameterizedTest
