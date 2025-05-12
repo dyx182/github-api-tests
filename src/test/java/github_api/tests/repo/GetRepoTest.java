@@ -13,7 +13,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-
 import java.io.File;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -51,11 +50,8 @@ public class GetRepoTest {
 
         File schemaFile = new File("src/test/resources/github_create_repo_schema.json");
 
-
-
         if (shouldCreateRepo) {
             new RepoClient().createRepo(requestJson, TOKEN, ENDPOINT_USER_REPOS);
-
         }
 
         Response response = new RepoClient().getRepo(LOGIN,

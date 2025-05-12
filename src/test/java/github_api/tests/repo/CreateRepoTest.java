@@ -19,7 +19,6 @@ import static github_api.api.config.ApiConfig.*;
 import static github_api.api.config.EnvConfig.*;
 import static github_api.api.utils.RepoTestData.*;
 
-
 @Story("POST /repos/")
 public class CreateRepoTest {
 
