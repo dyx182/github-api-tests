@@ -46,7 +46,7 @@ public class RepoTestData {
 
     public static CreateRepoRequest changeRepoJson() {
         return CreateRepoRequest.builder()
-                .name("test-repo-updated-")
+                .name("test-repo-updated")
                 .description("Updated description via API")
                 .homepage("https://updated.example.com")
                 .isPrivate(false)
@@ -68,9 +68,10 @@ public class RepoTestData {
                 .build();
     }
 
-    public static CreateRepoRequest changeNonExistRepoJson() {
+    public static CreateRepoRequest changeInvalidRepoJson() {
         return CreateRepoRequest.builder()
-                .name("non-exist-repo-")
+                .name("")
+                .homepage("123")
                 .build();
     }
     public static CreateRepoRequest getUpdateRequest(CreateRepoRequest requestJson, String uniqueRepoName) {

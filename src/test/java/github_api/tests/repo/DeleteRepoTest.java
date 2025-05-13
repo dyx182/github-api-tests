@@ -54,7 +54,8 @@ public class DeleteRepoTest {
         return Stream.of(
                 Arguments.of(getRequestJsonFull(), LOGIN, "test-repo", TOKEN, 204, true),
                 Arguments.of(getRequestJsonFull(), LOGIN, "non-exist-repo", TOKEN, 404, false),
-                Arguments.of(getRequestJsonFull(), LOGIN, "test-repo", TOKEN_WITHOUT_ACCESS, 403, false)
+                Arguments.of(getRequestJsonFull(), LOGIN, "test-repo", TOKEN_WITHOUT_ACCESS, 403, false),
+                Arguments.of(getRequestJsonFull(), LOGIN, "test-repo", TOKEN_WITHOUT_ACCESS, 401, false)
         );
     }
 }
