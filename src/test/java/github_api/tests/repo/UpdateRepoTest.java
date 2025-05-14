@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
+import static github_api.api.config.ApiConfig.ENDPOINT_REPOS;
 import static github_api.api.config.ApiConfig.ENDPOINT_USER_REPOS;
 import static github_api.api.config.EnvConfig.*;
 import static github_api.api.utils.RepoTestData.*;
@@ -43,18 +44,17 @@ public class UpdateRepoTest {
                            boolean validateSchema,
                            boolean shouldCreateRepo) {
 
+
+        String endpointUpdate = String.format("/%s/%s/%s", ENDPOINT_REPOS, login, repoName);
+        String endpointUpdateDelete = String.format("/%s/%s/%s", ENDPOINT_REPOS, login, changeRepoJson.getName());
+
         if (shouldCreateRepo) {
             new RepoClient().createRepo(requestJson, TOKEN, ENDPOINT_USER_REPOS);
         }
 
         sleep(300);
 
-        Response response = new RepoClient().updateRepo(
-                login,
-                repoName,
-                changeRepoJson,
-                token
-        );
+        Response response = new RepoClient().updateRepo(changeRepoJson, token, endpointUpdate);
         try {
             response.then()
                     .log()
@@ -68,10 +68,10 @@ public class UpdateRepoTest {
             }
         } finally {
             if (validateSchema) {
-                new RepoClient().deleteRepo(LOGIN, changeRepoJson.getName(), TOKEN);
+                new RepoClient().deleteRepo(TOKEN, endpointUpdateDelete);
             }
             else {
-                new RepoClient().deleteRepo(LOGIN, repoName, TOKEN);
+                new RepoClient().deleteRepo(TOKEN, endpointUpdate);
             }
         }
     }

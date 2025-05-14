@@ -46,16 +46,15 @@ public class CreateRepoTest {
 
         String uniqueRepoName = "test-repo" + UUID.randomUUID();
 
-        CreateRepoRequest request = getUpdateRequest(requestJson, uniqueRepoName);
+        String endpointDelete =  String.format("/%s/%s/%s",ENDPOINT_REPOS, LOGIN, uniqueRepoName);
+
+        CreateRepoRequest requestRepo = getUpdateRequest(requestJson, uniqueRepoName);
 
         if(shouldCreateDuplicate) {
-            new RepoClient().createRepo(request, token, endpoint);
+            new RepoClient().createRepo(requestRepo, token, endpoint);
         }
 
-        Response response = new RepoClient().createRepo(request,
-                token,
-                endpoint
-        );
+        Response response = new RepoClient().createRepo(requestRepo, token, endpoint);
 
         try {
             response.then()
@@ -69,7 +68,8 @@ public class CreateRepoTest {
             }
         } finally {
             if (validateSchema || shouldCreateDuplicate) {
-                new RepoClient().deleteRepo(LOGIN, uniqueRepoName, TOKEN);
+                new RepoClient().deleteRepo(token, endpointDelete);
+                //.delete(String.format("/%s/%s/%s",ApiConfig.ENDPOINT_REPOS, owner, repoName));
             }
         }
     }

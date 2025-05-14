@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
+import static github_api.api.config.ApiConfig.ENDPOINT_REPOS;
 import static github_api.api.config.ApiConfig.ENDPOINT_USER_REPOS;
 import static github_api.api.config.EnvConfig.*;
 import static github_api.api.utils.RepoTestData.getRequestJsonFull;
@@ -36,14 +37,14 @@ public class DeleteRepoTest {
                            int statusCode,
                            boolean shouldCreateRepo) {
 
+        //TODO Вынести в общий класс именно, как формат
+        String endpointDelete =  String.format("/%s/%s/%s",ENDPOINT_REPOS, LOGIN, repoName);
+
         if (shouldCreateRepo) {
-            new RepoClient().createRepo(requestJson, TOKEN, ENDPOINT_USER_REPOS);
+            new RepoClient().createRepo(requestJson, token, ENDPOINT_USER_REPOS);
         }
 
-        Response response = new RepoClient().deleteRepo(login,
-                repoName,
-                token
-        );
+        Response response = new RepoClient().deleteRepo(token, endpointDelete);
             response.then()
                     .log()
                     .ifError()
