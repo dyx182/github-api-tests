@@ -1,6 +1,6 @@
 package github_api.tests.repo;
 
-import github_api.api.clients.RepoClient;
+import github_api.api.clients.TestApiClients;
 import github_api.api.models.request.CreateRepoRequest;
 import io.qameta.allure.Description;
 import io.qameta.allure.Story;
@@ -41,10 +41,10 @@ public class DeleteRepoTest {
         String endpointDelete =  String.format("/%s/%s/%s",ENDPOINT_REPOS, LOGIN, repoName);
 
         if (shouldCreateRepo) {
-            new RepoClient().createRepo(requestJson, token, ENDPOINT_USER_REPOS);
+            new TestApiClients<>().post(requestJson, token, ENDPOINT_USER_REPOS);
         }
 
-        Response response = new RepoClient().deleteRepo(token, endpointDelete);
+        Response response = new TestApiClients<>().delete(token, endpointDelete);
             response.then()
                     .log()
                     .ifError()

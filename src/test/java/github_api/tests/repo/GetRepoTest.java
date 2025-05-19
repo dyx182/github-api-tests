@@ -1,6 +1,6 @@
 package github_api.tests.repo;
 
-import github_api.api.clients.RepoClient;
+import github_api.api.clients.TestApiClients;
 import github_api.api.models.request.CreateRepoRequest;
 import io.qameta.allure.Description;
 import io.qameta.allure.Story;
@@ -53,10 +53,10 @@ public class GetRepoTest {
         String endpoint = String.format("/%s/%s/%s", ENDPOINT_REPOS, LOGIN, repoName);
 
         if (shouldCreateRepo) {
-            new RepoClient().createRepo(requestJson, token, ENDPOINT_USER_REPOS);
+            new TestApiClients<>().post(requestJson, token, ENDPOINT_USER_REPOS);
         }
 
-        Response response = new RepoClient().getRepo(token, endpoint);
+        Response response = new TestApiClients<>().get(token, endpoint);
 
         try {
             response.then()
@@ -70,7 +70,7 @@ public class GetRepoTest {
             }
         } finally {
 
-               new RepoClient().deleteRepo(token, endpoint);
+               new TestApiClients<>().delete(token, endpoint);
         }
     }
 
@@ -101,17 +101,17 @@ public class GetRepoTest {
                 .name(originalName)
                 .build();
 
-        new RepoClient().createRepo(request, TOKEN, endpointCreate);
+        new TestApiClients<>().post(request, TOKEN, endpointCreate);
         sleep(300);
-        new RepoClient().updateRepo(getUpdateRequest(request, newName), TOKEN, endpointUpdate);
+        new TestApiClients<>().patch(getUpdateRequest(request, newName), TOKEN, endpointUpdate);
 
-        Response response = new RepoClient().getRepo(TOKEN, originalName);
+        Response response = new TestApiClients<>().get(TOKEN, originalName);
         response.then()
                 .log()
                 .body()
                 .statusCode(301)
                 .header("Location", containsString(newName));
 
-        new RepoClient().deleteRepo(TOKEN, endpointUpdate);
+        new TestApiClients<>().delete(TOKEN, endpointUpdate);
     }
 }

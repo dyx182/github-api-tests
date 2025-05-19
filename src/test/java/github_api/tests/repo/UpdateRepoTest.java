@@ -1,6 +1,6 @@
 package github_api.tests.repo;
 
-import github_api.api.clients.RepoClient;
+import github_api.api.clients.TestApiClients;
 import github_api.api.models.request.CreateRepoRequest;
 import io.qameta.allure.Description;
 import io.qameta.allure.Story;
@@ -49,12 +49,12 @@ public class UpdateRepoTest {
         String endpointUpdateDelete = String.format("/%s/%s/%s", ENDPOINT_REPOS, login, changeRepoJson.getName());
 
         if (shouldCreateRepo) {
-            new RepoClient().createRepo(requestJson, TOKEN, ENDPOINT_USER_REPOS);
+            new TestApiClients<>().post(requestJson, TOKEN, ENDPOINT_USER_REPOS);
         }
 
         sleep(300);
 
-        Response response = new RepoClient().updateRepo(changeRepoJson, token, endpointUpdate);
+        Response response = new TestApiClients<>().patch(changeRepoJson, token, endpointUpdate);
         try {
             response.then()
                     .log()
@@ -68,10 +68,10 @@ public class UpdateRepoTest {
             }
         } finally {
             if (validateSchema) {
-                new RepoClient().deleteRepo(TOKEN, endpointUpdateDelete);
+                new TestApiClients<>().delete(TOKEN, endpointUpdateDelete);
             }
             else {
-                new RepoClient().deleteRepo(TOKEN, endpointUpdate);
+                new TestApiClients<>().delete(TOKEN, endpointUpdate);
             }
         }
     }

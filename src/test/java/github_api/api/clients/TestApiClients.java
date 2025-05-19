@@ -7,11 +7,11 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 
-public class RepoClient<T> {
+public class TestApiClients<T> {
 
     private static final Gson gson = new Gson();
 
-    public Response createRepo(T requestJson, String token, String endpoint) {
+    public Response post(T requestJson, String token, String endpoint) {
 
         String repoJson = gson.toJson(requestJson);
 
@@ -24,7 +24,7 @@ public class RepoClient<T> {
                 .post(endpoint);
     }
 
-    public Response deleteRepo(String token, String endpoint) {
+    public Response delete(String token, String endpoint) {
 
         return RestAssured.given()
                 .baseUri(ApiConfig.BASE_URL)
@@ -33,7 +33,7 @@ public class RepoClient<T> {
                 .delete(endpoint);
     }
 
-    public Response updateRepo(T requestJson, String token, String endpoint) {
+    public Response patch(T requestJson, String token, String endpoint) {
 
         String changeRepoJson = gson.toJson(requestJson);
 
@@ -45,7 +45,7 @@ public class RepoClient<T> {
                 .patch(endpoint);
     }
 
-    public Response getRepo(String token, String endpoint) {
+    public Response get(String token, String endpoint) {
 
         return RestAssured.given()
                 .baseUri(ApiConfig.BASE_URL)

@@ -1,6 +1,6 @@
 package github_api.tests.repo;
 
-import github_api.api.clients.RepoClient;
+import github_api.api.clients.TestApiClients;
 import github_api.api.models.request.CreateRepoRequest;
 import io.qameta.allure.Description;
 import io.qameta.allure.Story;
@@ -51,10 +51,10 @@ public class CreateRepoTest {
         CreateRepoRequest requestRepo = getUpdateRequest(requestJson, uniqueRepoName);
 
         if(shouldCreateDuplicate) {
-            new RepoClient().createRepo(requestRepo, token, endpoint);
+            new TestApiClients<>().post(requestRepo, token, endpoint);
         }
 
-        Response response = new RepoClient().createRepo(requestRepo, token, endpoint);
+        Response response = new TestApiClients<>().post(requestRepo, token, endpoint);
 
         try {
             response.then()
@@ -68,8 +68,7 @@ public class CreateRepoTest {
             }
         } finally {
             if (validateSchema || shouldCreateDuplicate) {
-                new RepoClient().deleteRepo(token, endpointDelete);
-                //.delete(String.format("/%s/%s/%s",ApiConfig.ENDPOINT_REPOS, owner, repoName));
+                new TestApiClients<>().delete(token, endpointDelete);
             }
         }
     }
