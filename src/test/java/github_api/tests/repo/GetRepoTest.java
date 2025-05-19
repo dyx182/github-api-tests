@@ -1,6 +1,6 @@
 package github_api.tests.repo;
 
-import github_api.api.clients.RepoClient;
+import github_api.api.clients.TestApiClients;
 import github_api.api.models.request.CreateRepoRequest;
 import io.qameta.allure.Description;
 import io.qameta.allure.Story;
@@ -50,14 +50,13 @@ public class GetRepoTest {
 
         File schemaFile = new File("src/test/resources/github_create_repo_schema.json");
 
+        String endpoint = String.format("/%s/%s/%s", ENDPOINT_REPOS, LOGIN, repoName);
+
         if (shouldCreateRepo) {
-            new RepoClient().createRepo(requestJson, TOKEN, ENDPOINT_USER_REPOS);
+            new TestApiClients<>().post(requestJson, token, ENDPOINT_USER_REPOS);
         }
 
-        Response response = new RepoClient().getRepo(LOGIN,
-                repoName,
-                token
-        );
+        Response response = new TestApiClients<>().get(token, endpoint);
 
         try {
             response.then()
@@ -71,13 +70,13 @@ public class GetRepoTest {
             }
         } finally {
 
-               new RepoClient().deleteRepo(LOGIN, repoName, TOKEN);
+               new TestApiClients<>().delete(token, endpoint);
         }
     }
 
     static Stream<Arguments> testDataProvider() {
         return Stream.of(
-                Arguments.of(getRequestJsonFull(), "test-repo5fd9c581-d1ad-41b7-901e-a1f619804136", TOKEN, 200, true, true),
+                Arguments.of(getRequestJsonFull(), "test-repo", TOKEN, 200, true, true),
                 Arguments.of(getRequestJsonFull(), "non-exist-repo", TOKEN, 404, false, false),
                 Arguments.of(getRequestJsonFull(), "test-repo", INVALID_TOKEN, 401, false, true),
                 Arguments.of(getRequestJsonFull(), "test-repo", TOKEN_WITHOUT_ACCESS, 403, false, true)
@@ -94,21 +93,25 @@ public class GetRepoTest {
 
         String newName = originalName + UUID.randomUUID();
 
+        String endpointCreate =  String.format("/%s/%s/%s",ENDPOINT_REPOS, LOGIN, originalName);
+
+        String endpointUpdate =  String.format("/%s/%s/%s",ENDPOINT_REPOS, LOGIN, newName);
+
         CreateRepoRequest request = getRequestJsonFull().toBuilder()
                 .name(originalName)
                 .build();
 
-        new RepoClient().createRepo(request, TOKEN, ENDPOINT_USER_REPOS);
+        new TestApiClients<>().post(request, TOKEN, endpointCreate);
         sleep(300);
-        new RepoClient().updateRepo(LOGIN, originalName, getUpdateRequest(request, newName), TOKEN);
+        new TestApiClients<>().patch(getUpdateRequest(request, newName), TOKEN, endpointUpdate);
 
-        Response response = new RepoClient().getRepo(LOGIN, originalName, TOKEN);
+        Response response = new TestApiClients<>().get(TOKEN, originalName);
         response.then()
                 .log()
                 .body()
                 .statusCode(301)
                 .header("Location", containsString(newName));
 
-        new RepoClient().deleteRepo(LOGIN, newName, TOKEN);
+        new TestApiClients<>().delete(TOKEN, endpointUpdate);
     }
 }

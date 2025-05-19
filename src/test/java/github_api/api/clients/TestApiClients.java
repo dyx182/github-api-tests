@@ -2,17 +2,16 @@ package github_api.api.clients;
 
 import com.google.gson.Gson;
 import github_api.api.config.ApiConfig;
-import github_api.api.models.request.CreateRepoRequest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 
-public class RepoClient {
+public class TestApiClients<T> {
 
     private static final Gson gson = new Gson();
 
-    public Response createRepo(CreateRepoRequest requestJson, String token, String endpoint) {
+    public Response post(T requestJson, String token, String endpoint) {
 
         String repoJson = gson.toJson(requestJson);
 
@@ -25,33 +24,33 @@ public class RepoClient {
                 .post(endpoint);
     }
 
-    public Response deleteRepo(String owner, String repoName, String token) {
+    public Response delete(String token, String endpoint) {
 
         return RestAssured.given()
                 .baseUri(ApiConfig.BASE_URL)
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .delete(ApiConfig.ENDPOINT_REPOS + owner + "/" + repoName);
+                .delete(endpoint);
     }
 
-    public Response updateRepo(String owner, String repoName, CreateRepoRequest changeRepo, String token) {
+    public Response patch(T requestJson, String token, String endpoint) {
 
-        String changeRepoJson = gson.toJson(changeRepo);
+        String changeRepoJson = gson.toJson(requestJson);
 
         return RestAssured.given()
                 .baseUri(ApiConfig.BASE_URL)
                 .header("Authorization", "Bearer " + token)
                 .body(changeRepoJson)
                 .when()
-                .patch(ApiConfig.ENDPOINT_REPOS + owner + "/" + repoName);
+                .patch(endpoint);
     }
 
-    public Response getRepo(String owner, String repoName, String token) {
+    public Response get(String token, String endpoint) {
 
         return RestAssured.given()
                 .baseUri(ApiConfig.BASE_URL)
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .get(ApiConfig.ENDPOINT_REPOS + owner + "/" + repoName);
+                .get(endpoint);
     }
 }
