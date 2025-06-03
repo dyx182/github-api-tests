@@ -1,0 +1,336 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GitHub Issue Response",
+  "description": "Схема для ответа API GitHub при создании/получении Issue",
+  "type": "object",
+  "properties": {
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "API URL issue"
+    },
+    "repository_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "API URL репозитория"
+    },
+    "labels_url": {
+      "type": "string",
+      "description": "Шаблон URL для меток issue"
+    },
+    "comments_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "API URL комментариев issue"
+    },
+    "events_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "API URL событий issue"
+    },
+    "html_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Web URL issue"
+    },
+    "id": {
+      "type": "integer",
+      "description": "Уникальный ID issue"
+    },
+    "node_id": {
+      "type": "string",
+      "description": "Глобальный ID в формате GraphQL"
+    },
+    "number": {
+      "type": "integer",
+      "description": "Номер issue в репозитории"
+    },
+    "title": {
+      "type": "string",
+      "description": "Заголовок issue"
+    },
+    "user": {
+      "$ref": "#/definitions/user"
+    },
+    "labels": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/label"
+      }
+    },
+    "state": {
+      "type": "string",
+      "enum": ["open", "closed"],
+      "description": "Статус issue"
+    },
+    "locked": {
+      "type": "boolean",
+      "description": "Флаг блокировки обсуждения"
+    },
+    "assignee": {
+      "$ref": "#/definitions/user",
+      "description": "Основной назначенный пользователь"
+    },
+    "assignees": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/user"
+      }
+    },
+    "milestone": {
+      "type": ["object", "null"],
+      "description": "Привязанная веха"
+    },
+    "comments": {
+      "type": "integer",
+      "description": "Количество комментариев"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Дата создания"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Дата последнего обновления"
+    },
+    "closed_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Дата закрытия"
+    },
+    "author_association": {
+      "type": "string",
+      "enum": ["COLLABORATOR", "CONTRIBUTOR", "FIRST_TIMER", "FIRST_TIME_CONTRIBUTOR", "MANNEQUIN", "MEMBER", "NONE", "OWNER"],
+      "description": "Роль автора в репозитории"
+    },
+    "active_lock_reason": {
+      "type": ["string", "null"],
+      "description": "Причина блокировки"
+    },
+    "body": {
+      "type": ["string", "null"],
+      "description": "Текст issue"
+    },
+    "closed_by": {
+      "type": ["object", "null"],
+      "description": "Пользователь, закрывший issue"
+    },
+    "reactions": {
+      "$ref": "#/definitions/reactions"
+    },
+    "timeline_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL временной шкалы issue"
+    },
+    "performed_via_github_app": {
+      "type": ["object", "null"],
+      "description": "GitHub App, через который выполнено действие"
+    },
+    "state_reason": {
+      "oneOf": [
+        { "type": "string", "enum": ["completed", "not_planned", "reopened"] },
+        { "type": "null" }
+      ]
+    },
+    "sub_issues_summary": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "description": "Общее количество подзадач"
+        },
+        "completed": {
+          "type": "integer",
+          "description": "Количество завершенных подзадач"
+        },
+        "percent_completed": {
+          "type": "integer",
+          "description": "Процент завершенных подзадач"
+        }
+      },
+      "required": ["total", "completed", "percent_completed"]
+    }
+  },
+  "required": [
+    "url", "id", "number", "title", "user", "state", "created_at", "updated_at"
+  ],
+  "definitions": {
+    "user": {
+      "type": "object",
+      "properties": {
+        "login": {
+          "type": "string",
+          "description": "Логин пользователя"
+        },
+        "id": {
+          "type": "integer",
+          "description": "ID пользователя"
+        },
+        "node_id": {
+          "type": "string",
+          "description": "GraphQL ID"
+        },
+        "avatar_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL аватара"
+        },
+        "gravatar_id": {
+          "type": "string",
+          "description": "Gravatar ID"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL профиля"
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Web URL профиля"
+        },
+        "followers_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL списка подписчиков"
+        },
+        "following_url": {
+          "type": "string",
+          "description": "Шаблон URL подписок"
+        },
+        "gists_url": {
+          "type": "string",
+          "description": "Шаблон URL gists"
+        },
+        "starred_url": {
+          "type": "string",
+          "description": "Шаблон URL звезд"
+        },
+        "subscriptions_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL подписок"
+        },
+        "organizations_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL организаций"
+        },
+        "repos_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL репозиториев"
+        },
+        "events_url": {
+          "type": "string",
+          "description": "Шаблон URL событий"
+        },
+        "received_events_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL полученных событий"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["User", "Organization"],
+          "description": "Тип аккаунта"
+        },
+        "site_admin": {
+          "type": "boolean",
+          "description": "Флаг администратора GitHub"
+        },
+        "user_view_type": {
+          "type": "string",
+          "description": "Тип представления пользователя"
+        }
+      },
+      "required": ["login", "id", "node_id", "url", "type"]
+    },
+    "label": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "ID метки"
+        },
+        "node_id": {
+          "type": "string",
+          "description": "GraphQL ID"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL метки"
+        },
+        "name": {
+          "type": "string",
+          "description": "Название метки"
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{6}$",
+          "description": "Цвет в HEX"
+        },
+        "default": {
+          "type": "boolean",
+          "description": "Флаг стандартной метки"
+        },
+        "description": {
+          "type": ["string", "null"],
+          "description": "Описание метки"
+        }
+      },
+      "required": ["id", "name", "color"]
+    },
+    "reactions": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL реакций"
+        },
+        "total_count": {
+          "type": "integer",
+          "description": "Общее количество реакций"
+        },
+        "+1": {
+          "type": "integer",
+          "description": "Количество"
+        },
+        "-1": {
+          "type": "integer",
+          "description": "Количество"
+        },
+        "laugh": {
+          "type": "integer",
+          "description": "Количество"
+        },
+        "hooray": {
+          "type": "integer",
+          "description": "Количество"
+        },
+        "confused": {
+          "type": "integer",
+          "description": "Количество"
+        },
+        "heart": {
+          "type": "integer",
+          "description": "Количество"
+        },
+        "rocket": {
+          "type": "integer",
+          "description": "Количество"
+        },
+        "eyes": {
+          "type": "integer",
+          "description": "Количество"
+        }
+      },
+      "required": ["url", "total_count"]
+    }
+  }
+}

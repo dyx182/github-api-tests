@@ -28,6 +28,10 @@ public class ApiConfig {
         return urlFormatIssue("repos", login, repoName, "issues");
     }
 
+    public static String getUpdateIssueEndpoint(String login, String repoName,int issueNumber) {
+        return String.format("/repos/%s/%s/issues/%s", login, repoName, issueNumber);
+    }
+
 
 //TODO Переработать, для не авторизованной зоны
     public static final String ENDPOINT_USERS = "users";
