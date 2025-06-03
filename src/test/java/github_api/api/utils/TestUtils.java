@@ -14,4 +14,8 @@ public class TestUtils {
         return String.format("/%s/%s/%s", a, s, d);
     }
 
+    public static String urlFormatIssue(String a, String b, String c, String d) {
+        return  String.format("/%s/%s/%s/%s", a, b, c, d);
+    }
+
 }

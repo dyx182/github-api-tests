@@ -1,6 +1,7 @@
 package github_api.api.config;
 
 
+import static github_api.api.utils.TestUtils.urlFormatIssue;
 import static github_api.api.utils.TestUtils.urlFormatRepo;
 
 public class ApiConfig {
@@ -23,7 +24,9 @@ public class ApiConfig {
         return urlFormatRepo("repos", login, repoName);
     }
 
-
+    public static String getCreateIssueEndpoint(String login, String repoName) {
+        return urlFormatIssue("repos", login, repoName, "issues");
+    }
 
 
 //TODO Переработать, для не авторизованной зоны
