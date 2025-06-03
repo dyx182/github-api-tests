@@ -16,8 +16,9 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import static github_api.api.config.ApiConfig.*;
+import static github_api.api.config.ApiConfig.getDeleteRepoEndpoint;
 import static github_api.api.config.EnvConfig.*;
-import static github_api.api.utils.RepoTestData.*;
+import static github_api.api.testdata.RepoTestData.*;
 
 @Story("POST /repos/")
 public class CreateRepoTest {
@@ -46,7 +47,7 @@ public class CreateRepoTest {
 
         String uniqueRepoName = "test-repo" + UUID.randomUUID();
 
-        String endpointDelete =  String.format("/%s/%s/%s",ENDPOINT_REPOS, LOGIN, uniqueRepoName);
+        String endpointDelete =  getDeleteRepoEndpoint(LOGIN, uniqueRepoName);
 
         CreateRepoRequest requestRepo = getUpdateRequest(requestJson, uniqueRepoName);
 
@@ -75,11 +76,11 @@ public class CreateRepoTest {
 
     static Stream<Arguments> testDataProvider() {
         return Stream.of(
-                Arguments.of(getRequestJsonFull(), TOKEN, ENDPOINT_USER_REPOS, 201, true, false),
-                Arguments.of(getRequestJsonMinimal(), TOKEN, ENDPOINT_USER_REPOS, 201, true, false),
-                Arguments.of(getRequestJsonFull(), TOKEN_WITHOUT_ACCESS, ENDPOINT_USER_REPOS, 403, false, false),
-                Arguments.of(getRequestJsonFull(), INVALID_TOKEN, ENDPOINT_USER_REPOS, 401, false, false),
-                Arguments.of(getRequestJsonInvalid(), TOKEN, ENDPOINT_USER_REPOS, 422, false, true),
+                Arguments.of(getRequestJsonFull(), TOKEN, getCreateRepoEndpoint(), 201, true, false),
+                Arguments.of(getRequestJsonMinimal(), TOKEN, getCreateRepoEndpoint(), 201, true, false),
+                Arguments.of(getRequestJsonFull(), TOKEN_WITHOUT_ACCESS, getCreateRepoEndpoint(), 403, false, false),
+                Arguments.of(getRequestJsonFull(), INVALID_TOKEN, getCreateRepoEndpoint(), 401, false, false),
+                Arguments.of(getRequestJsonInvalid(), TOKEN, getCreateRepoEndpoint(), 422, false, true),
                 Arguments.of(getRequestJsonFull(), TOKEN, getOrgEndpoint(ORG), 404, false, false)
         );
     }

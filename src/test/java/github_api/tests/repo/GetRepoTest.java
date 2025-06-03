@@ -19,9 +19,9 @@ import java.util.stream.Stream;
 
 import static github_api.api.config.ApiConfig.*;
 import static github_api.api.config.EnvConfig.*;
-import static github_api.api.utils.RepoTestData.getRequestJsonFull;
-import static github_api.api.utils.RepoTestData.getUpdateRequest;
-import static github_api.api.utils.TestUtils.sleep;
+import static github_api.api.testdata.RepoTestData.getRequestJsonFull;
+import static github_api.api.testdata.RepoTestData.getUpdateRequest;
+import static github_api.api.utils.TestUtils.waiting;
 import static org.hamcrest.Matchers.containsString;
 
 @Story("GET /repos/{owner}/{repo}")
@@ -50,10 +50,10 @@ public class GetRepoTest {
 
         File schemaFile = new File("src/test/resources/github_create_repo_schema.json");
 
-        String endpoint = String.format("/%s/%s/%s", ENDPOINT_REPOS, LOGIN, repoName);
+        String endpoint = getUpdateRepoEndpoint(LOGIN, repoName);
 
         if (shouldCreateRepo) {
-            new TestApiClients<>().post(requestJson, token, ENDPOINT_USER_REPOS);
+            new TestApiClients<>().post(requestJson, token, getCreateRepoEndpoint());
         }
 
         Response response = new TestApiClients<>().get(token, endpoint);
@@ -83,8 +83,10 @@ public class GetRepoTest {
         );
     }
 
-    @Disabled("GitHub API обрабатывает переименование репозитория с задержкой. " +
-            "Этот тест требует отдельного запуска и проверки через несколько минут после переименования.")
+    @Disabled("""
+            GitHub API обрабатывает переименование репозитория с задержкой.
+            Этот тест требует отдельного запуска и ручной проверки через несколько минут после переименования.
+            """)
     @Test
     @DisplayName("Проверка ответа 301 Moved Permanently")
     void getRepo_shouldReturn301WhenRenamed() {
@@ -93,16 +95,16 @@ public class GetRepoTest {
 
         String newName = originalName + UUID.randomUUID();
 
-        String endpointCreate =  String.format("/%s/%s/%s",ENDPOINT_REPOS, LOGIN, originalName);
+        String endpointCreate =  getUpdateRepoEndpoint(LOGIN, originalName);
 
-        String endpointUpdate =  String.format("/%s/%s/%s",ENDPOINT_REPOS, LOGIN, newName);
+        String endpointUpdate =  getUpdateRepoEndpoint(LOGIN, newName);
 
         CreateRepoRequest request = getRequestJsonFull().toBuilder()
                 .name(originalName)
                 .build();
 
         new TestApiClients<>().post(request, TOKEN, endpointCreate);
-        sleep(300);
+        waiting(300);
         new TestApiClients<>().patch(getUpdateRequest(request, newName), TOKEN, endpointUpdate);
 
         Response response = new TestApiClients<>().get(TOKEN, originalName);

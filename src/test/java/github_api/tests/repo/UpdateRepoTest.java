@@ -12,11 +12,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static github_api.api.config.ApiConfig.ENDPOINT_REPOS;
-import static github_api.api.config.ApiConfig.ENDPOINT_USER_REPOS;
+import static github_api.api.config.ApiConfig.*;
 import static github_api.api.config.EnvConfig.*;
-import static github_api.api.utils.RepoTestData.*;
-import static github_api.api.utils.TestUtils.sleep;
+import static github_api.api.testdata.RepoTestData.*;
+import static github_api.api.utils.TestUtils.*;
 import static org.hamcrest.Matchers.equalTo;
 
 @Story("PATCH /repos/{owner}/{repo}")
@@ -36,7 +35,6 @@ public class UpdateRepoTest {
             """)
     @MethodSource("testDataProvider")
     public void updateRepo(CreateRepoRequest requestJson,
-                           String login,
                            String repoName,
                            CreateRepoRequest changeRepoJson,
                            String token,
@@ -45,14 +43,14 @@ public class UpdateRepoTest {
                            boolean shouldCreateRepo) {
 
 
-        String endpointUpdate = String.format("/%s/%s/%s", ENDPOINT_REPOS, login, repoName);
-        String endpointUpdateDelete = String.format("/%s/%s/%s", ENDPOINT_REPOS, login, changeRepoJson.getName());
+        String endpointUpdate = getUpdateRepoEndpoint(LOGIN, repoName);
+        String endpointUpdateDelete = getDeleteRepoEndpoint(LOGIN, changeRepoJson.getName());
 
         if (shouldCreateRepo) {
-            new TestApiClients<>().post(requestJson, TOKEN, ENDPOINT_USER_REPOS);
+            new TestApiClients<>().post(requestJson, TOKEN, getCreateRepoEndpoint());
         }
 
-        sleep(300);
+        waiting(1000);
 
         Response response = new TestApiClients<>().patch(changeRepoJson, token, endpointUpdate);
         try {
@@ -78,11 +76,11 @@ public class UpdateRepoTest {
 
     static Stream<Arguments> testDataProvider() {
         return Stream.of(
-                Arguments.of(getRequestJsonFull(), LOGIN, "test-repo", changeRepoJson(), TOKEN, 200, true, true),
-                Arguments.of(getRequestJsonFull(), LOGIN, "non-exist-repo", changeRepoJson(), TOKEN, 404, false, false),
-                Arguments.of(getRequestJsonFull(), LOGIN, "test-repo", changeRepoJson(), TOKEN_WITHOUT_ACCESS, 403, false, true),
-                Arguments.of(getRequestJsonFull(), LOGIN, "test-repo", changeInvalidRepoJson(), TOKEN, 422, false, true),
-                Arguments.of(getRequestJsonFull(), LOGIN, "test-repo", changeRepoJson(), INVALID_TOKEN, 401, false, true)
+                Arguments.of(getRequestJsonFull(), "test-repo", updateRepoJson(), TOKEN, 200, true, true),
+                Arguments.of(getRequestJsonFull(), "non-exist-repo", updateRepoJson(), TOKEN, 404, false, false),
+                Arguments.of(getRequestJsonFull(), "test-repo", updateRepoJson(), TOKEN_WITHOUT_ACCESS, 403, false, true),
+                Arguments.of(getRequestJsonFull(), "test-repo", updateInvalidRepoJson(), TOKEN, 422, false, true),
+                Arguments.of(getRequestJsonFull(), "test-repo", updateRepoJson(), INVALID_TOKEN, 401, false, true)
         );
     }
 }

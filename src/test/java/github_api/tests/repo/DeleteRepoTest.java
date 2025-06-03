@@ -12,10 +12,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static github_api.api.config.ApiConfig.ENDPOINT_REPOS;
-import static github_api.api.config.ApiConfig.ENDPOINT_USER_REPOS;
+import static github_api.api.config.ApiConfig.*;
+import static github_api.api.config.ApiConfig.getCreateRepoEndpoint;
 import static github_api.api.config.EnvConfig.*;
-import static github_api.api.utils.RepoTestData.getRequestJsonFull;
+import static github_api.api.testdata.RepoTestData.getRequestJsonFull;
 
 @Story("DELETE /repos/{owner}/{repo}")
 public class DeleteRepoTest {
@@ -31,17 +31,16 @@ public class DeleteRepoTest {
         """)
     @MethodSource("testDataProvider")
     public void deleteRepo(CreateRepoRequest requestJson,
-                           String login,
                            String repoName,
                            String token,
+                           String endpoint,
                            int statusCode,
                            boolean shouldCreateRepo) {
 
-        //TODO Вынести в общий класс именно, как формат
-        String endpointDelete =  String.format("/%s/%s/%s",ENDPOINT_REPOS, LOGIN, repoName);
+        String endpointDelete =  getDeleteRepoEndpoint(LOGIN, repoName);
 
         if (shouldCreateRepo) {
-            new TestApiClients<>().post(requestJson, token, ENDPOINT_USER_REPOS);
+            new TestApiClients<>().post(requestJson, TOKEN, endpoint);
         }
 
         Response response = new TestApiClients<>().delete(token, endpointDelete);
@@ -53,10 +52,10 @@ public class DeleteRepoTest {
 
     static Stream<Arguments> testDataProvider() {
         return Stream.of(
-                Arguments.of(getRequestJsonFull(), LOGIN, "test-repo", TOKEN, 204, true),
-                Arguments.of(getRequestJsonFull(), LOGIN, "non-exist-repo", TOKEN, 404, false),
-                Arguments.of(getRequestJsonFull(), LOGIN, "test-repo", TOKEN_WITHOUT_ACCESS, 403, false),
-                Arguments.of(getRequestJsonFull(), LOGIN, "test-repo", TOKEN_WITHOUT_ACCESS, 401, false)
+                Arguments.of(getRequestJsonFull(), "test-repo", TOKEN, getCreateRepoEndpoint(), 204, true),
+                Arguments.of(getRequestJsonFull(), "non-exist-repo", TOKEN, getCreateRepoEndpoint(), 404, false),
+                Arguments.of(getRequestJsonFull(), "test-repo", TOKEN_WITHOUT_ACCESS, getCreateRepoEndpoint(), 403, false),
+                Arguments.of(getRequestJsonFull(), "test-repo", TOKEN_WITHOUT_ACCESS, getCreateRepoEndpoint(), 401, false)
         );
     }
 }

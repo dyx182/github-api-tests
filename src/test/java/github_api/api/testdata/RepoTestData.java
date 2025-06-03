@@ -1,4 +1,4 @@
-package github_api.api.utils;
+package github_api.api.testdata;
 
 import github_api.api.models.request.CreateRepoRequest;
 
@@ -44,7 +44,7 @@ public class RepoTestData {
                 .build();
     }
 
-    public static CreateRepoRequest changeRepoJson() {
+    public static CreateRepoRequest updateRepoJson() {
         return CreateRepoRequest.builder()
                 .name("test-repo-updated")
                 .description("Updated description via API")
@@ -68,7 +68,7 @@ public class RepoTestData {
                 .build();
     }
 
-    public static CreateRepoRequest changeInvalidRepoJson() {
+    public static CreateRepoRequest updateInvalidRepoJson() {
         return CreateRepoRequest.builder()
                 .name("")
                 .homepage("123")
