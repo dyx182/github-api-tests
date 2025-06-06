@@ -43,6 +43,9 @@ public class CreateRepoTest {
                            boolean validateSchema,
                            boolean shouldCreateDuplicate) {
 
+        //TODO Убарть из принимаемых переменных endpoint
+        //TODO УБарть второй тест (с минимальными данными)
+
         File schemaFile = new File("src/test/resources/github_create_repo_schema.json");
 
         String uniqueRepoName = "test-repo" + UUID.randomUUID();

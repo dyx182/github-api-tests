@@ -92,11 +92,9 @@ public class GetRepoTest {
     void getRepo_shouldReturn301WhenRenamed() {
 
         String originalName = "test-repo";
-
         String newName = originalName + UUID.randomUUID();
 
         String endpointCreate =  getUpdateRepoEndpoint(LOGIN, originalName);
-
         String endpointUpdate =  getUpdateRepoEndpoint(LOGIN, newName);
 
         CreateRepoRequest request = getRequestJsonFull().toBuilder()

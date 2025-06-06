@@ -24,7 +24,7 @@ public class ApiConfig {
         return urlFormatRepo("repos", login, repoName);
     }
 
-    public static String getCreateIssueEndpoint(String login, String repoName) {
+    public static String getCreateOrGetIssueEndpoint(String login, String repoName) {
         return urlFormatIssue("repos", login, repoName, "issues");
     }
 

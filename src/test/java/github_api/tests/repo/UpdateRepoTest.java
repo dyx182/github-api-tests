@@ -50,7 +50,7 @@ public class UpdateRepoTest {
             new TestApiClients<>().post(requestJson, TOKEN, getCreateRepoEndpoint());
         }
 
-        waiting(1000);
+        waiting(500);
 
         Response response = new TestApiClients<>().patch(changeRepoJson, token, endpointUpdate);
         try {

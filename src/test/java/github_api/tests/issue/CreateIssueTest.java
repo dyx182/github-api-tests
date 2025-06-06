@@ -47,11 +47,11 @@ public class CreateIssueTest {
 
         File schemaFile = new File("src/test/resources/github_create_issue_schema.json");
 
-        String endpointCreateIssue = getCreateIssueEndpoint(LOGIN, getRequestJsonFull().getName());
+        String endpointCreateIssue = getCreateOrGetIssueEndpoint(LOGIN, getRequestJsonFull().getName());
         String endpointDeleteRepo = getDeleteRepoEndpoint(LOGIN, getRequestJsonFull().getName());
 
         if (shouldCreateRepo) {
-            new TestApiClients<>().post(getRequestJsonFull(), token, getCreateRepoEndpoint());
+            new TestApiClients<>().post(getRequestJsonFull(), TOKEN, getCreateRepoEndpoint());
         }
 
         Response createIssue = new TestApiClients<>().post(requestJson, token, endpointCreateIssue);

@@ -49,7 +49,7 @@ public class UpdateIssueTest {
 
         String repoName = getRequestJsonFull().getName();
         String endpointUpdateIssue = getUpdateIssueEndpoint(LOGIN, repoName, 1);
-        String endpointCreateIssue = getCreateIssueEndpoint(LOGIN, repoName);
+        String endpointCreateIssue = getCreateOrGetIssueEndpoint(LOGIN, repoName);
         String endpointDeleteRepo = getDeleteRepoEndpoint(LOGIN, repoName);
 
         if (shouldCreateRepo) {

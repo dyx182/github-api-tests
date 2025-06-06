@@ -33,14 +33,13 @@ public class DeleteRepoTest {
     public void deleteRepo(CreateRepoRequest requestJson,
                            String repoName,
                            String token,
-                           String endpoint,
                            int statusCode,
                            boolean shouldCreateRepo) {
 
         String endpointDelete =  getDeleteRepoEndpoint(LOGIN, repoName);
 
         if (shouldCreateRepo) {
-            new TestApiClients<>().post(requestJson, TOKEN, endpoint);
+            new TestApiClients<>().post(requestJson, TOKEN, getCreateRepoEndpoint());
         }
 
         Response response = new TestApiClients<>().delete(token, endpointDelete);
@@ -52,10 +51,10 @@ public class DeleteRepoTest {
 
     static Stream<Arguments> testDataProvider() {
         return Stream.of(
-                Arguments.of(getRequestJsonFull(), "test-repo", TOKEN, getCreateRepoEndpoint(), 204, true),
-                Arguments.of(getRequestJsonFull(), "non-exist-repo", TOKEN, getCreateRepoEndpoint(), 404, false),
-                Arguments.of(getRequestJsonFull(), "test-repo", TOKEN_WITHOUT_ACCESS, getCreateRepoEndpoint(), 403, false),
-                Arguments.of(getRequestJsonFull(), "test-repo", TOKEN_WITHOUT_ACCESS, getCreateRepoEndpoint(), 401, false)
+                Arguments.of(getRequestJsonFull(), "test-repo", TOKEN, 204, true),
+                Arguments.of(getRequestJsonFull(), "non-exist-repo", TOKEN, 404, false),
+                Arguments.of(getRequestJsonFull(), "test-repo", TOKEN_WITHOUT_ACCESS, 403, false),
+                Arguments.of(getRequestJsonFull(), "test-repo", TOKEN_WITHOUT_ACCESS, 401, false)
         );
     }
 }
