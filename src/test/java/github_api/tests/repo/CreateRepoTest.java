@@ -24,17 +24,6 @@ import static github_api.api.testdata.RepoTestData.*;
 public class CreateRepoTest {
 
     @ParameterizedTest
-    @DisplayName("Проверка возможности создания репозитория")
-    @Description("""
-            Тест проверяет корректность основных сценариев создания репозитория:
-            - Ответ имеет ожидаемый статус код:
-                201 Created – успешное создание.
-                403 Forbidden – нет прав.
-                401 Unauthorized – нет авторизации.
-                422 Unprocessable Entity – ошибка валидации.
-                404 Not Found – организация не найдена.
-            - Для успешных ответов происходит проверка соответсвия JSON-схеме
-            """)
     @MethodSource("testDataProvider")
     public void createRepo(CreateRepoRequest requestJson,
                            String token,
@@ -42,9 +31,6 @@ public class CreateRepoTest {
                            int statusCode,
                            boolean validateSchema,
                            boolean shouldCreateDuplicate) {
-
-        //TODO Убарть из принимаемых переменных endpoint
-        //TODO УБарть второй тест (с минимальными данными)
 
         File schemaFile = new File("src/test/resources/github_create_repo_schema.json");
 

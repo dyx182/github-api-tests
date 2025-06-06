@@ -17,3 +17,4 @@ public class UpdateIssueRequest {
     private List<String> labels;
     private String due_on; //formatted YYYY-MM-DD
 }
+
